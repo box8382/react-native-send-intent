@@ -111,8 +111,8 @@ var SendIntentAndroid = {
    * @returns {Promise<boolean>} true if app or fallback URL is opened, false otherwise.
    */
 
-  openAppWithUri(dataUri) {
-    return RNSendIntentAndroid.openAppWithUri(dataUri, extras || {});
+  openAppWithUri(intentUri, extras) {
+    return RNSendIntentAndroid.openAppWithUri(intentUri, extras || {});
   },
   openChromeIntent(dataUri) {
     return RNSendIntentAndroid.openChromeIntent(dataUri);
