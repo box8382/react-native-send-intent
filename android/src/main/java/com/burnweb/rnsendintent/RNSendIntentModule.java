@@ -608,6 +608,26 @@ public class RNSendIntentModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void openAppWithUri(String intentUri, ReadableMap extras, final Promise promise) {
+        try {
+            Intent intent = Intent.parseUri(intentUri, Intent.URI_INTENT_SCHEME);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent existPackage = this.reactContext.getPackageManager().getLaunchIntentForPackage(intent.getPackage());
+            if (existPackage != null) {
+                this.reactContext.startActivity(intent);
+            } else {
+                Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+                marketIntent.setData(Uri.parse("market://details?id="+intent.getPackage()));
+                marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.reactContext.startActivity(marketIntent);
+            }
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.resolve(false);
+        }
+    }
+
+    @ReactMethod
     public void openChromeIntent(String dataUri, final Promise promise) {
         // following intent syntax of: https://developer.chrome.com/multidevice/android/intents
         Intent sendIntent;
